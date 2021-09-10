@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -18,6 +19,14 @@ func main() {
 
 	http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(rw, "hello, world")
+	})
+
+	http.HandleFunc("webhook", func(rw http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(string(body))
 	})
 
 	log.Fatal(s.ListenAndServe())
